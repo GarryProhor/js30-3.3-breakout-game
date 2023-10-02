@@ -53,6 +53,24 @@ function update(){
     //рисуем игрока
     context.fillStyle = 'deepskyblue';
     context.fillRect(player.x, player.y, player.width, player.height);
+
+    //рисуем мяч
+    context.fillStyle = 'white';
+    ball.x += ball.velocityX;
+    ball.y += ball.velocityY;
+    context.fillRect(ball.x, ball.y, ball.width, ball.height);
+
+    //проверка столкновений
+    if(ball.y <= 0){
+        //если столкнулся с верхней границей
+        ball.velocityY *= -1;//меняем направление мяча
+    }else if(ball.x <= 0 || ball.x + ball.width >= boardWidth){
+        //если столкнулся с левой или правой границей
+        ball.velocityX *= -1;//меняем направление мяча
+    }else if(ball.y + ball.height >= boardHeight){
+        //если столкнулся с нижней границей
+        //игрок проиграл
+    }
 }
 
 function outOfBounds(xPosition){
