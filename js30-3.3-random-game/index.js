@@ -156,6 +156,12 @@ function outOfBounds(xPosition){
 }
 
 function movePlayer(e){
+    if (gameOver) {
+        if (e.code == "Space") {
+            resetGame();
+        }
+        return;
+    }
     if(e.code == 'ArrowLeft'){
         // player.x -= player.velocityX;
         let nextPlayerX = player.x - player.velocityX;
@@ -190,4 +196,26 @@ function leftCollision(ball, block) { //a слева b (мяч слева бло
 
 function rightCollision(ball, block) { //a справа b (мяч справа блока)
     return detectCollision(ball, block) && (block.x + block.width) >= ball.x;
+}
+function resetGame() {
+    gameOver = false;
+    player = {
+        x : boardWidth/2 - playerWidth/2,
+        y : boardHeight - playerHeight - 5,
+        width: playerWidth,
+        height: playerHeight,
+        velocityX : playerVelocityX
+    }
+    ball = {
+        x : boardWidth/2,
+        y : boardHeight/2,
+        width: ballWidth,
+        height: ballHeight,
+        velocityX : ballVelocityX,
+        velocityY : ballVelocityY
+    }
+    blockArray = [];
+    blockRows = 3;
+    score = 0;
+    createBlocks();
 }
