@@ -40,11 +40,23 @@ function update(){
     context.fillRect(player.x, player.y, player.width, player.height);
 }
 
+function outOfBounds(xPosition){
+    return (xPosition < 0 || xPosition + playerWidth > boardWidth);
+}
+
 function movePlayer(e){
     if(e.code == 'ArrowLeft'){
-        player.x -= player.velocityX;
+        // player.x -= player.velocityX;
+        let nextPlayerX = player.x - player.velocityX;
+        if(!outOfBounds(nextPlayerX)){
+            player.x = nextPlayerX;
+        }
     }else if(e.code == 'ArrowRight'){
-        player.x += player.velocityX;
+        // player.x += player.velocityX;
+        let nextPlayerX = player.x + player.velocityX;
+        if(!outOfBounds(nextPlayerX)){
+            player.x = nextPlayerX;
+        }
     }
 }
 
