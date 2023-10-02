@@ -17,6 +17,21 @@ let player = {
     velocityX: playerVelocityX,
 }
 
+//мяч
+let ballWidth = 10;
+let ballHeight = 10;
+let ballVelocityX = 3;
+let ballVelocityY = 2;
+
+let ball = {
+    x: boardWidth/2,
+    y: boardHeight/2,
+    width: ballWidth,
+    height: ballHeight,
+    velocityX: ballVelocityX,
+    velocityY: ballVelocityY
+}
+
 window.onload = function () {
     board = document.querySelector('.board');
     board.width = boardWidth;
