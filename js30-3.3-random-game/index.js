@@ -134,6 +134,11 @@ function update(){
             context.fillRect(block.x, block.y, block.width, block.height);
         }
     }
+
+
+    //рисуем счет
+    context.font = "22px sans-serif";
+    context.fillText(score, 10, 25);
 }
 
 function outOfBounds(xPosition){
