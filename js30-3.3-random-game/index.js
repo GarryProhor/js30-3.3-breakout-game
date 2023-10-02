@@ -45,6 +45,8 @@ let blockCount = 0;
 let blockX = 15;
 let blockY = 45;
 
+let gameOver = false;
+
 window.onload = function () {
     board = document.querySelector('.board');
     board.width = boardWidth;
@@ -81,6 +83,10 @@ function createBlocks() {
 
 function update(){
     requestAnimationFrame(update);
+    //очистить доску
+    if (gameOver) {
+        return;
+    }
     context.clearRect(0,0, board.width, board.height);
 
     //рисуем игрока
@@ -103,6 +109,10 @@ function update(){
     }else if(ball.y + ball.height >= boardHeight){
         //если столкнулся с нижней границей
         //игрок проиграл
+        context.font = "20px sans-serif";
+        context.fillText("Игра окончена.", 250, 260);
+        context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 300);
+        gameOver = true;
     }
 
     //отбить мяч от ракетки игрока
