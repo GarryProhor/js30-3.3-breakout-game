@@ -71,6 +71,14 @@ function update(){
         //если столкнулся с нижней границей
         //игрок проиграл
     }
+
+    //отбить мяч от ракетки игрока
+    if (topCollision(ball, player) || bottomCollision(ball, player)) {
+        ball.velocityY *= -1;   //перевернуть направление вверх или вниз
+    }
+    else if (leftCollision(ball, player) || rightCollision(ball, player)) {
+        ball.velocityX *= -1;   //перевернуть направление вправо или влево
+    }
 }
 
 function outOfBounds(xPosition){
@@ -100,3 +108,18 @@ function detectCollision(a, b){
         && a.y + a.height > b.y; //правый нижний угол a не достигает левого верхнего угла b
 }
 
+function topCollision(ball, block) { //a выше b (мяч выше блока)
+    return detectCollision(ball, block) && (ball.y + ball.height) >= block.y;
+}
+
+function bottomCollision(ball, block) { //a ниже b (мяч ниже блока)
+    return detectCollision(ball, block) && (block.y + block.height) >= ball.y;
+}
+
+function leftCollision(ball, block) { //a слева b (мяч слева блока)
+    return detectCollision(ball, block) && (ball.x + ball.width) >= block.x;
+}
+
+function rightCollision(ball, block) { //a справа b (мяч справа блока)
+    return detectCollision(ball, block) && (block.x + block.width) >= ball.x;
+}
