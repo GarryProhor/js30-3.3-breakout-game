@@ -144,11 +144,16 @@ function update(){
             context.fillRect(block.x, block.y, block.width, block.height);
         }
     }
-
-
     //рисуем счет
     context.font = "22px sans-serif";
     context.fillText(score, 10, 25);
+
+    //следующий уровень
+    if (blockCount == 0) {
+        score += 100*blockRows*blockColumns; //бонус счета
+        blockRows = Math.min(blockRows + 1, blockMaxRows);
+        createBlocks();
+    }
 }
 
 function outOfBounds(xPosition){
