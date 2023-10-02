@@ -149,7 +149,7 @@ function update(){
     context.fillText(score, 10, 25);
 
     //следующий уровень
-    if (blockCount == 0) {
+    if (blockCount === 0) {
         score += 100*blockRows*blockColumns; //бонус счета
         blockRows = Math.min(blockRows + 1, blockMaxRows);
         createBlocks();
@@ -162,18 +162,18 @@ function outOfBounds(xPosition){
 
 function movePlayer(e){
     if (gameOver) {
-        if (e.code == "Space") {
+        if (e.code === "Space") {
             resetGame();
         }
         return;
     }
-    if(e.code == 'ArrowLeft'){
+    if(e.code === 'ArrowLeft'){
         // player.x -= player.velocityX;
         let nextPlayerX = player.x - player.velocityX;
         if(!outOfBounds(nextPlayerX)){
             player.x = nextPlayerX;
         }
-    }else if(e.code == 'ArrowRight'){
+    }else if(e.code === 'ArrowRight'){
         // player.x += player.velocityX;
         let nextPlayerX = player.x + player.velocityX;
         if(!outOfBounds(nextPlayerX)){
