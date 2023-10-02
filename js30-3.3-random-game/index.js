@@ -1,8 +1,10 @@
 //доска
 let board;
-let boardWidth = 600;
+let boardWidth = 620;
 let boardHeight = 600;
 let context;
+
+let score = 0;
 
 //игрок
 let playerWidth = 80;
@@ -31,6 +33,17 @@ let ball = {
     velocityX: ballVelocityX,
     velocityY: ballVelocityY
 }
+//блоки
+let blockArray = [];
+let blockWidth = 50;
+let blockHeight = 10;
+let blockColumns = 10;
+let blockRows = 3; //добавить больше по ходу игры
+let blockMaxRows = 10; //ограничить количество строк
+let blockCount = 0;
+//углы стартового блока слева вверху
+let blockX = 15;
+let blockY = 45;
 
 window.onload = function () {
     board = document.querySelector('.board');
@@ -44,6 +57,26 @@ window.onload = function () {
 
     requestAnimationFrame(update);
     document.addEventListener('keydown', movePlayer);
+
+    //создаем блоки
+    createBlocks();
+}
+
+function createBlocks() {
+    blockArray = []; //очистить блок-массив
+    for (let c = 0; c < blockColumns; c++) {
+        for (let r = 0; r < blockRows; r++) {
+            let block = {
+                x : blockX + c*blockWidth + c*10, //c*10 интервал между столбцами 10 пикселей
+                y : blockY + r*blockHeight + r*10, //r*10 интервал в 10 пикселей между строками
+                width : blockWidth,
+                height : blockHeight,
+                break : false
+            }
+            blockArray.push(block);
+        }
+    }
+    blockCount = blockArray.length;
 }
 
 function update(){
@@ -79,6 +112,28 @@ function update(){
     else if (leftCollision(ball, player) || rightCollision(ball, player)) {
         ball.velocityX *= -1;   //перевернуть направление вправо или влево
     }
+
+
+    //рисуем блоки
+    context.fillStyle = "skyblue";
+    for (let i = 0; i < blockArray.length; i++) {
+        let block = blockArray[i];
+        if (!block.break) {
+            if (topCollision(ball, block) || bottomCollision(ball, block)) {
+                block.break = true;     // блок разрушен
+                ball.velocityY *= -1;   // перевернуть направление вверх или вниз
+                score += 100;
+                blockCount -= 1;
+            }
+            else if (leftCollision(ball, block) || rightCollision(ball, block)) {
+                block.break = true;     // блок разрушен
+                ball.velocityX *= -1;   // перевернуть направление X влево или вправо
+                score += 100;
+                blockCount -= 1;
+            }
+            context.fillRect(block.x, block.y, block.width, block.height);
+        }
+    }
 }
 
 function outOfBounds(xPosition){
@@ -111,11 +166,9 @@ function detectCollision(a, b){
 function topCollision(ball, block) { //a выше b (мяч выше блока)
     return detectCollision(ball, block) && (ball.y + ball.height) >= block.y;
 }
-
 function bottomCollision(ball, block) { //a ниже b (мяч ниже блока)
     return detectCollision(ball, block) && (block.y + block.height) >= ball.y;
 }
-
 function leftCollision(ball, block) { //a слева b (мяч слева блока)
     return detectCollision(ball, block) && (ball.x + ball.width) >= block.x;
 }
