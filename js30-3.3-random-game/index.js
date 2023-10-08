@@ -46,6 +46,8 @@ let blockX = 15;
 let blockY = 45;
 
 let gameOver = false;
+let paused = false;
+
 
 window.onload = function () {
     board = document.querySelector('.board');
@@ -57,12 +59,32 @@ window.onload = function () {
     context.fillStyle = 'deepskyblue';
     context.fillRect(player.x, player.y, player.width, player.height);
 
+
+    // Запускаем игру
     requestAnimationFrame(update);
     document.addEventListener('keydown', movePlayer);
 
     //создаем блоки
     createBlocks();
 }
+
+document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+        if (gameOver) {
+            resetGame();
+        } else {
+            paused = !paused; // Переключаем режим паузы
+            if (paused) {
+                // Включить паузу
+                cancelAnimationFrame(update);
+            } else {
+                // Возобновить игру
+                requestAnimationFrame(update);
+            }
+        }
+    }
+});
+
 
 function createBlocks() {
     blockArray = []; //очистить блок-массив
@@ -82,77 +104,86 @@ function createBlocks() {
 }
 
 function update(){
-    requestAnimationFrame(update);
-    //очистить доску
-    if (gameOver) {
-        return;
-    }
-    context.clearRect(0,0, board.width, board.height);
-
-    //рисуем игрока
-    context.fillStyle = 'deepskyblue';
-    context.fillRect(player.x, player.y, player.width, player.height);
-
-    //рисуем мяч
-    context.fillStyle = 'white';
-    ball.x += ball.velocityX;
-    ball.y += ball.velocityY;
-    context.fillRect(ball.x, ball.y, ball.width, ball.height);
-
-    //проверка столкновений
-    if(ball.y <= 0){
-        //если столкнулся с верхней границей
-        ball.velocityY *= -1;//меняем направление мяча
-    }else if(ball.x <= 0 || ball.x + ball.width >= boardWidth){
-        //если столкнулся с левой или правой границей
-        ball.velocityX *= -1;//меняем направление мяча
-    }else if(ball.y + ball.height >= boardHeight){
-        //если столкнулся с нижней границей
-        //игрок проиграл
-        context.font = "20px sans-serif";
-        context.fillText("Игра окончена.", 250, 260);
-        context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 300);
-        gameOver = true;
-    }
-
-    //отбить мяч от ракетки игрока
-    if (topCollision(ball, player) || bottomCollision(ball, player)) {
-        ball.velocityY *= -1;   //перевернуть направление вверх или вниз
-    }
-    else if (leftCollision(ball, player) || rightCollision(ball, player)) {
-        ball.velocityX *= -1;   //перевернуть направление вправо или влево
-    }
-
-
-    //рисуем блоки
-    context.fillStyle = "skyblue";
-    for (let i = 0; i < blockArray.length; i++) {
-        let block = blockArray[i];
-        if (!block.break) {
-            if (topCollision(ball, block) || bottomCollision(ball, block)) {
-                block.break = true;     // блок разрушен
-                ball.velocityY *= -1;   // перевернуть направление вверх или вниз
-                score += 100;
-                blockCount -= 1;
-            }
-            else if (leftCollision(ball, block) || rightCollision(ball, block)) {
-                block.break = true;     // блок разрушен
-                ball.velocityX *= -1;   // перевернуть направление X влево или вправо
-                score += 100;
-                blockCount -= 1;
-            }
-            context.fillRect(block.x, block.y, block.width, block.height);
+    if (!paused) { // Проверка на паузу
+        requestAnimationFrame(update);
+        //очистить доску
+        if (gameOver) {
+            saveGameResult(score);
+            return;
         }
-    }
-    //рисуем счет
-    context.font = "22px sans-serif";
-    context.fillText(score, 10, 25);
+        context.clearRect(0,0, board.width, board.height);
 
-    //следующий уровень
-    if (blockCount === 0) {
-        score += 100*blockRows*blockColumns; //бонус счета
-        blockRows = Math.min(blockRows + 1, blockMaxRows);
-        createBlocks();
+        //рисуем игрока
+        context.fillStyle = 'deepskyblue';
+        context.fillRect(player.x, player.y, player.width, player.height);
+
+        //рисуем мяч
+        context.fillStyle = 'white';
+        ball.x += ball.velocityX;
+        ball.y += ball.velocityY;
+        context.fillRect(ball.x, ball.y, ball.width, ball.height);
+
+        //проверка столкновений
+        if(ball.y <= 0){
+            //если столкнулся с верхней границей
+            ball.velocityY *= -1;//меняем направление мяча
+        }else if(ball.x <= 0 || ball.x + ball.width >= boardWidth){
+            //если столкнулся с левой или правой границей
+            ball.velocityX *= -1;//меняем направление мяча
+        }else if(ball.y + ball.height >= boardHeight){
+            //если столкнулся с нижней границей
+            //игрок проиграл
+            context.font = "20px sans-serif";
+            context.fillText("Игра окончена.", 250, 260);
+            context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 300);
+            gameOver = true;
+        }
+
+        //отбить мяч от ракетки игрока
+        if (topCollision(ball, player) || bottomCollision(ball, player)) {
+            ball.velocityY *= -1;   //перевернуть направление вверх или вниз
+        }
+        else if (leftCollision(ball, player) || rightCollision(ball, player)) {
+            ball.velocityX *= -1;   //перевернуть направление вправо или влево
+        }
+
+
+        //рисуем блоки
+        context.fillStyle = "skyblue";
+        for (let i = 0; i < blockArray.length; i++) {
+            let block = blockArray[i];
+            if (!block.break) {
+                if (topCollision(ball, block) || bottomCollision(ball, block)) {
+                    block.break = true;     // блок разрушен
+                    ball.velocityY *= -1;   // перевернуть направление вверх или вниз
+                    score += 100;
+                    blockCount -= 1;
+                }
+                else if (leftCollision(ball, block) || rightCollision(ball, block)) {
+                    block.break = true;     // блок разрушен
+                    ball.velocityX *= -1;   // перевернуть направление X влево или вправо
+                    score += 100;
+                    blockCount -= 1;
+                }
+                context.fillRect(block.x, block.y, block.width, block.height);
+            }
+        }
+        //рисуем счет
+        context.font = "22px sans-serif";
+        context.fillText(score, 10, 25);
+
+        //следующий уровень
+        if (blockCount === 0) {
+            score += 100*blockRows*blockColumns; //бонус счета
+            blockRows = Math.min(blockRows + 1, blockMaxRows);
+            createBlocks();
+        }
+    }else {
+        // паузв
+        context.fillStyle = 'white';
+        context.font = "20px sans-serif";
+        context.fillText("Пауза", 290, 260);
+        context.fillText("Нажмите 'Пробел' чтобы продолжить", 150, 300);
     }
 }
 
@@ -222,3 +253,30 @@ function resetGame() {
     score = 0;
     createBlocks();
 }
+
+// функция сохранить результаты в localStorage
+function saveGameResult(value) {
+    const games = localStorage.getItem('games');
+
+    if (!games) {
+        const data = JSON.stringify([{score: value}]);
+        localStorage.setItem(`games`, data);
+    } else {
+        const parsedGames = JSON.parse(games);
+        parsedGames.push({score: value});
+
+        if (parsedGames.length > 10) {
+            parsedGames.shift();
+        }
+
+        localStorage.setItem('games', JSON.stringify(parsedGames));
+    }
+}
+
+
+
+
+
+
+
+
