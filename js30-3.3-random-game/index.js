@@ -48,7 +48,6 @@ let blockY = 45;
 let gameOver = false;
 let paused = false;
 
-
 window.onload = function () {
     board = document.querySelector('.board');
     board.width = boardWidth;
@@ -59,13 +58,30 @@ window.onload = function () {
     context.fillStyle = 'deepskyblue';
     context.fillRect(player.x, player.y, player.width, player.height);
 
+    let gameStarted = false; // Флаг для отслеживания начала игры
 
     // Запускаем игру
-    requestAnimationFrame(update);
-    document.addEventListener('keydown', movePlayer);
+    context.font = "20px sans-serif";
+    context.fillText("Старт", 280, 260);
+    context.fillText("Для того чтобы начать игру нажмите 'Пробел'", 110, 300);
+    context.fillText("Для управления воспользуйтесь стрелками на клавиатуре", 50, 340);
 
-    //создаем блоки
-    createBlocks();
+    // Функция для начала игры
+    function startGame() {
+        if (!gameStarted) {
+            gameStarted = true; // Устанавливаем флаг начала игры
+            document.removeEventListener('keydown', startGame); // Удаляем обработчик события
+            document.addEventListener('keydown', movePlayer); // Добавляем обработчик для управления
+            createBlocks();
+        }
+    }
+
+    // Запускаем игру после нажатия клавиши "Пробел"
+    document.addEventListener('keydown', function (e) {
+        if (e.code === 'Space') {
+            startGame();
+        }
+    });
 }
 
 document.addEventListener('keydown', function(e) {
@@ -114,14 +130,17 @@ function update(){
         context.clearRect(0,0, board.width, board.height);
 
         //рисуем игрока
-        context.fillStyle = 'deepskyblue';
+        context.fillStyle = '#8A88B9';
         context.fillRect(player.x, player.y, player.width, player.height);
+        context.lineCap = 'round';
+
 
         //рисуем мяч
         context.fillStyle = 'white';
         ball.x += ball.velocityX;
         ball.y += ball.velocityY;
         context.fillRect(ball.x, ball.y, ball.width, ball.height);
+
 
         //проверка столкновений
         if(ball.y <= 0){
@@ -136,7 +155,7 @@ function update(){
             context.font = "20px sans-serif";
             context.fillText("Игра окончена.", 250, 260);
             context.fillText(`Ваш итоговый счет: ${score}`, 220, 300);
-            context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 340);
+            context.fillText("Нажмите 'Пробел' чтобы начать заново.", 130, 340);
             gameOver = true;
         }
 
@@ -150,7 +169,7 @@ function update(){
 
 
         //рисуем блоки
-        context.fillStyle = "skyblue";
+        context.fillStyle = "#F96855";
         for (let i = 0; i < blockArray.length; i++) {
             let block = blockArray[i];
             if (!block.break) {
@@ -180,7 +199,7 @@ function update(){
             createBlocks();
         }
     }else {
-        // паузв
+        // пауза
         context.fillStyle = 'white';
         context.font = "20px sans-serif";
         context.fillText("Пауза", 290, 260);

@@ -21,9 +21,9 @@ body{
 }
 .board{
    background-color: black;
-    border-top: 5px solid deepskyblue;
-    border-left: 5px solid deepskyblue;
-    border-right: 5px solid deepskyblue;
+    border-top: 5px solid #161984;
+    border-left: 5px solid #161984;
+    border-right: 5px solid #161984;
 }
 .footer{
     width: 100%;
