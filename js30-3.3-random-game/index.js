@@ -135,7 +135,8 @@ function update(){
             //игрок проиграл
             context.font = "20px sans-serif";
             context.fillText("Игра окончена.", 250, 260);
-            context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 300);
+            context.fillText(`Ваш итоговый счет: ${score}`, 220, 300);
+            context.fillText(" Нажмите 'Пробел' чтобы начать заново.", 130, 340);
             gameOver = true;
         }
 
