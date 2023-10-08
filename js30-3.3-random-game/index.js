@@ -39,7 +39,7 @@ let blockWidth = 50;
 let blockHeight = 10;
 let blockColumns = 10;
 let blockRows = 3; //добавить больше по ходу игры
-let blockMaxRows = 4; //ограничить количество строк
+let blockMaxRows = 10; //ограничить количество строк
 let blockCount = 0;
 //углы стартового блока слева вверху
 let blockX = 15;
