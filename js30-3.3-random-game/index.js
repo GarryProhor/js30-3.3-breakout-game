@@ -56,7 +56,8 @@ window.onload = function () {
 
     //рисуем игрока
     context.fillStyle = 'deepskyblue';
-    context.fillRect(player.x, player.y, player.width, player.height);
+    roundRect(context, player.x, player.y, player.width, player.height, 3);
+    context.fill();
 
     let gameStarted = false; // Флаг для отслеживания начала игры
 
@@ -129,11 +130,11 @@ function update(){
         }
         context.clearRect(0,0, board.width, board.height);
 
-        //рисуем игрока
-        context.fillStyle = '#8A88B9';
-        context.fillRect(player.x, player.y, player.width, player.height);
-        context.lineCap = 'round';
 
+//рисуем игрока с скругленными краями
+        context.fillStyle = '#8A88B9';
+        roundRect(context, player.x, player.y, player.width, player.height, 3); // 5 - радиус скругления
+        context.fill();
 
         //рисуем мяч
         context.fillStyle = 'white';
@@ -186,7 +187,8 @@ function update(){
                     score += 100;
                     blockCount -= 1;
                 }
-                context.fillRect(block.x, block.y, block.width, block.height);
+                roundRect(context, block.x, block.y, block.width, block.height, 3);
+                context.fill();
             }
         }
         //рисуем счет
@@ -294,6 +296,20 @@ function saveGameResult(value) {
     }
 }
 
+// Функция для рисования скругленного прямоугольника
+function roundRect(context, x, y, width, height, radius) {
+    context.beginPath();
+    context.moveTo(x + radius, y);
+    context.lineTo(x + width - radius, y);
+    context.arcTo(x + width, y, x + width, y + radius, radius);
+    context.lineTo(x + width, y + height - radius);
+    context.arcTo(x + width, y + height, x + width - radius, y + height, radius);
+    context.lineTo(x + radius, y + height);
+    context.arcTo(x, y + height, x, y + height - radius, radius);
+    context.lineTo(x, y + radius);
+    context.arcTo(x, y, x + radius, y, radius);
+    context.closePath();
+}
 
 
 
