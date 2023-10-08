@@ -7,7 +7,7 @@ let context;
 let score = 0;
 
 //игрок
-let playerWidth = 620;
+let playerWidth = 80;
 let playerHeight = 10;
 let playerVelocityX = 10;
 
