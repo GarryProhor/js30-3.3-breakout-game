@@ -327,6 +327,17 @@ function roundRect(context, x, y, width, height, radius) {
     context.closePath();
 }
 
+document.addEventListener('keydown', function(e) {
+    if (e.code === 'ArrowUp') {
+        // Увеличить скорость мяча
+        ball.velocityX *= 2;
+        ball.velocityY *= 2;
+    } else if (e.code === 'ArrowDown') {
+        // Уменьшить скорость мяча
+        ball.velocityX /= 2;
+        ball.velocityY /= 2;
+    }
+});
 
 
 
