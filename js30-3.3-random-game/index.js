@@ -7,7 +7,7 @@ let context;
 let score = 0;
 
 //игрок
-let playerWidth = 80;
+let playerWidth = 620;
 let playerHeight = 10;
 let playerVelocityX = 10;
 
@@ -39,7 +39,7 @@ let blockWidth = 50;
 let blockHeight = 10;
 let blockColumns = 10;
 let blockRows = 3; //добавить больше по ходу игры
-let blockMaxRows = 10; //ограничить количество строк
+let blockMaxRows = 4; //ограничить количество строк
 let blockCount = 0;
 //углы стартового блока слева вверху
 let blockX = 15;
@@ -47,6 +47,8 @@ let blockY = 45;
 
 let gameOver = false;
 let paused = false;
+let isLastRound = false;
+
 
 window.onload = function () {
     board = document.querySelector('.board');
@@ -195,11 +197,25 @@ function update(){
         context.font = "22px sans-serif";
         context.fillText(score, 10, 25);
 
+        if (blockRows === blockMaxRows) {
+            isLastRound = true;
+        }
+
         //следующий уровень
         if (blockCount === 0) {
             score += 100*blockRows*blockColumns; //бонус счета
             blockRows = Math.min(blockRows + 1, blockMaxRows);
             createBlocks();
+
+            if (isLastRound) {
+                context.fillStyle = 'white';
+                context.font = "20px sans-serif";
+                context.fillText("Игра окончена.", 250, 260);
+                context.fillText(`Ваш итоговый счет: ${score}`, 220, 300);
+                context.fillText("Нажмите 'Пробел' чтобы начать заново.", 130, 340);
+                gameOver = true;
+            }
+
         }
     }else {
         // пауза
