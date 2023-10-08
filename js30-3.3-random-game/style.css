@@ -1,0 +1,67 @@
+body{
+    margin: 0;
+    height: 100vh;
+}
+.wrapper{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    text-align: center;
+    background: url(https://images.wallpaperscraft.ru/image/single/galaktika_zemlia_set_126341_3840x2160.jpg) no-repeat;
+    background-size: cover;
+
+}
+.content{
+    flex: 1 0 auto;
+    margin: 10px;
+}
+.board{
+   background-color: black;
+    border-top: 5px solid #161984;
+    border-left: 5px solid #161984;
+    border-right: 5px solid #161984;
+}
+
+.game-control{
+    width: 620px;
+    height: 150px;
+    background: url(https://img.freepik.com/free-photo/low-angle-shot-of-the-mesmerizing-starry-sky_181624-27925.jpg?w=996&t=st=1696767058~exp=1696767658~hmac=5d2001f9acef26c51bd2dd2bc590df47505c325e3b7030a7b36db6b1f7ac51ca) no-repeat;
+    background-size: cover;
+    margin-bottom: 10px;
+    border: 5px solid #161984;
+}
+.game-control-title{
+    text-align: start;
+    color: white;
+    font-size: 20px;
+    margin-left: 10px;
+}
+.game-control-text{
+    text-align: start;
+    color: white;
+    font-size: 16px;
+    margin-top: 5px;
+    margin-left: 10px;
+}
+.footer{
+    width: 100%;
+    height: 50px;
+    color:white;
+    background-color: #020007;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex: 0 0 auto;
+}
+.footer-link{
+    color:white;
+    text-decoration: none;
+}
+.footer-logo{
+    width: 60px;
+    filter: invert();
+}
