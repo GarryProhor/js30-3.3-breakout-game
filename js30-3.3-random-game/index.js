@@ -64,10 +64,16 @@ window.onload = function () {
     let gameStarted = false; // Флаг для отслеживания начала игры
 
     // Запускаем игру
-    context.font = "20px sans-serif";
-    context.fillText("Старт", 280, 260);
-    context.fillText("Для того чтобы начать игру нажмите 'Пробел'", 110, 300);
-    context.fillText("Для управления воспользуйтесь стрелками на клавиатуре", 50, 340);
+    context.font = "22px sans-serif";
+    context.fillText("Управление игрой осуществляется только", 50, 220);
+    context.fillText("c помощью клавиатуры", 50, 260);
+    context.font = "16px sans-serif";
+    context.fillText("1. Старт / Пауза - Space", 50, 300);
+    context.fillText("2. Движение вправо / влево - стрелки ArrowLeft / ArrowRight", 50, 340);
+    context.font = "22px sans-serif";
+    context.fillText("Настройки игры", 50, 380);
+    context.font = "16px sans-serif";
+    context.fillText("3. Изменение скорости движения мяча - стрелки ArrowUp / ArrowDown", 50, 420);
 
     // Функция для начала игры
     function startGame() {
