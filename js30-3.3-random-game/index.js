@@ -293,24 +293,59 @@ function resetGame() {
     createBlocks();
 }
 
-// функция сохранить результаты в localStorage
-function saveGameResult(value) {
+// Функция для загрузки сохраненных игр из localStorage
+function loadGameResults() {
     const games = localStorage.getItem('games');
-
     if (!games) {
-        const data = JSON.stringify([{score: value}]);
-        localStorage.setItem(`games`, data);
-    } else {
-        const parsedGames = JSON.parse(games);
-        parsedGames.push({score: value});
+        return new Map();
+    }
+    const parsedGames = JSON.parse(games);
+    const gameResults = new Map();
 
-        if (parsedGames.length > 10) {
-            parsedGames.shift();
-        }
+    // Заполняем Map значениями из localStorage
+    for (let i = 0; i < Math.min(parsedGames.length, 10); i++) {
+        gameResults.set(i + 1, parsedGames[i].score);
+    }
 
-        localStorage.setItem('games', JSON.stringify(parsedGames));
+    return gameResults;
+}
+
+// Функция для сохранения результатов игры
+function saveGameResult(value) {
+    const gameResults = loadGameResults();
+
+    // Находим свободный ключ для нового результата
+    let newKey = 1;
+    while (gameResults.has(newKey)) {
+        newKey++;
+    }
+
+    // Удаляем десятый (с наименьшим ключом) элемент Map
+    if (gameResults.size >= 10) {
+        gameResults.delete(10);
+    }
+
+    // Добавляем новый результат в Map с найденным ключом
+    gameResults.set(newKey, value);
+
+    // Сохраняем обновленный Map в localStorage
+    const gamesArray = Array.from(gameResults.values()).map(score => ({ score }));
+    localStorage.setItem('games', JSON.stringify(gamesArray));
+}
+
+// Загружаем сохраненные результаты игр
+const gameResults = loadGameResults();
+
+// Для доступа к результатам по ключам от 1 до 10:
+for (let key = 1; key <= 10; key++) {
+    if (gameResults.has(key)) {
+        const score = gameResults.get(key);
+        console.log(`Результат #${key}: ${score}`);
     }
 }
+
+
+
 
 // Функция для рисования скругленного прямоугольника
 function roundRect(context, x, y, width, height, radius) {
