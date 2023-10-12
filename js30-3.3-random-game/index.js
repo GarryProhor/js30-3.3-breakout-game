@@ -9,7 +9,7 @@ let score = 0;
 //игрок
 let playerWidth = 80;
 let playerHeight = 10;
-let playerVelocityX = 10;
+let playerVelocityX = 25;
 
 let player = {
     x: boardWidth/2 - playerWidth/2,
@@ -220,6 +220,9 @@ function update(){
                 context.fillText(`Ваш итоговый счет: ${score}`, 220, 300);
                 context.fillText("Нажмите 'Пробел' чтобы начать заново.", 130, 340);
                 gameOver = true;
+
+                // Сохранить счет игры в localStorage
+                saveGameResult(score);
             }
 
         }
@@ -299,59 +302,27 @@ function resetGame() {
     createBlocks();
 }
 
-// Функция для загрузки сохраненных игр из localStorage
-function loadGameResults() {
+function saveGameResult(score) {
     const games = localStorage.getItem('games');
-    if (!games) {
-        return new Map();
-    }
-    const parsedGames = JSON.parse(games);
-    const gameResults = new Map();
-
-    // Заполняем Map значениями из localStorage
-    for (let i = 0; i < Math.min(parsedGames.length, 10); i++) {
-        gameResults.set(i + 1, parsedGames[i].score);
-    }
-
-    return gameResults;
-}
-
-// Функция для сохранения результатов игры
-function saveGameResult(value) {
-    const gameResults = loadGameResults();
-
-    // Находим свободный ключ для нового результата
-    let newKey = 1;
-    while (gameResults.has(newKey)) {
-        newKey++;
-    }
-
-    // Удаляем десятый (с наименьшим ключом) элемент Map
-    if (gameResults.size >= 10) {
-        gameResults.delete(10);
-    }
-
-    // Добавляем новый результат в Map с найденным ключом
-    gameResults.set(newKey, value);
-
-    // Сохраняем обновленный Map в localStorage
-    const gamesArray = Array.from(gameResults.values()).map(score => ({ score }));
-    localStorage.setItem('games', JSON.stringify(gamesArray));
-}
-
-// Загружаем сохраненные результаты игр
-const gameResults = loadGameResults();
-
-// Для доступа к результатам по ключам от 1 до 10:
-for (let key = 1; key <= 10; key++) {
-    if (gameResults.has(key)) {
-        const score = gameResults.get(key);
-        console.log(`Результат #${key}: ${score}`);
+    if(!games) {
+        const data = JSON.stringify([{game: score}]);
+        localStorage.setItem(`games`, data);
+    }else{
+        const parsedGames = JSON.parse(games);
+        // const gameNumber = Math.floor(Math.random() * 10) + 1;
+        parsedGames.push({game: score });
+        if (parsedGames.length > 10) {
+            parsedGames.shift();
+        }
+        localStorage.setItem('games', JSON.stringify(parsedGames));
     }
 }
 
-
-
+// // Загружаем сохраненный счет текущей игры по указанному номеру игры
+// function loadGameResult(gameNumber) {
+//     const key = `currentGameScore-${gameNumber}`;
+//     return localStorage.getItem(key);
+// }
 
 // Функция для рисования скругленного прямоугольника
 function roundRect(context, x, y, width, height, radius) {
