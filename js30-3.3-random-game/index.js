@@ -7,9 +7,12 @@ let context;
 let score = 0;
 
 //игрок
-let playerWidth = 80;
+let playerWidth = 70;
 let playerHeight = 10;
 let playerVelocityX = 25;
+const playerSizeStep = 50; // Шаг изменения размера
+const minPlayerSize = 20; // Минимальный размер игрока
+const maxPlayerSize = 620; // Максимальный размер игрока
 
 let player = {
     x: boardWidth/2 - playerWidth/2,
@@ -257,6 +260,19 @@ function movePlayer(e){
             player.x = nextPlayerX;
         }
     }
+    if (e.key === '+') {
+        playerWidth += playerSizeStep;
+        if (playerWidth > maxPlayerSize) {
+            playerWidth = maxPlayerSize;
+        }
+        player.width = playerWidth;
+    } else if (e.key === '-') {
+        playerWidth -= playerSizeStep;
+        if (playerWidth < minPlayerSize) {
+            playerWidth = minPlayerSize;
+        }
+        player.width = playerWidth;
+    }
 }
 
 function detectCollision(a, b){
@@ -281,6 +297,7 @@ function rightCollision(ball, block) { //a справа b (мяч справа �
 }
 function resetGame() {
     gameOver = false;
+    playerWidth = 70; // Вернуть размер игрока к первоначальному значению 70
     player = {
         x : boardWidth/2 - playerWidth/2,
         y : boardHeight - playerHeight - 5,
