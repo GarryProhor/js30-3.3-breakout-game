@@ -9,7 +9,7 @@ let score = 0;
 //игрок
 let playerWidth = 80;
 let playerHeight = 10;
-let playerVelocityX = 10;
+let playerVelocityX = 25;
 
 let player = {
     x: boardWidth/2 - playerWidth/2,
