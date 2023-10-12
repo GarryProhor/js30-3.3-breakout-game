@@ -68,15 +68,16 @@ window.onload = function () {
 
     // Запускаем игру
     context.font = "22px sans-serif";
-    context.fillText("Управление игрой осуществляется только", 50, 220);
-    context.fillText("c помощью клавиатуры", 50, 260);
+    context.fillText("Управление игрой осуществляется только", 50, 180);
+    context.fillText("c помощью клавиатуры", 50, 220);
     context.font = "16px sans-serif";
-    context.fillText("1. Старт / Пауза - Space", 50, 300);
-    context.fillText("2. Движение вправо / влево - стрелки ArrowLeft / ArrowRight", 50, 340);
+    context.fillText("1. Старт / Пауза - Space", 50, 260);
+    context.fillText("2. Движение вправо / влево - стрелки ArrowLeft / ArrowRight", 50, 300);
     context.font = "22px sans-serif";
-    context.fillText("Настройки игры", 50, 380);
+    context.fillText("Настройки игры", 50, 340);
     context.font = "16px sans-serif";
-    context.fillText("3. Изменение скорости движения мяча - стрелки ArrowUp / ArrowDown", 50, 420);
+    context.fillText("3. Изменение скорости движения мяча - стрелки ArrowUp / ArrowDown", 50, 380);
+    context.fillText("4. Изменение размера платформы - кнопки + / -", 50, 420);
 
     // Функция для начала игры
     function startGame() {
