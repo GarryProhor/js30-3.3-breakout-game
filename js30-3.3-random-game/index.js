@@ -7,9 +7,12 @@ let context;
 let score = 0;
 
 //игрок
-let playerWidth = 80;
+let playerWidth = 70;
 let playerHeight = 10;
 let playerVelocityX = 25;
+const playerSizeStep = 50; // Шаг изменения размера
+const minPlayerSize = 20; // Минимальный размер игрока
+const maxPlayerSize = 620; // Максимальный размер игрока
 
 let player = {
     x: boardWidth/2 - playerWidth/2,
@@ -65,15 +68,16 @@ window.onload = function () {
 
     // Запускаем игру
     context.font = "22px sans-serif";
-    context.fillText("Управление игрой осуществляется только", 50, 220);
-    context.fillText("c помощью клавиатуры", 50, 260);
+    context.fillText("Управление игрой осуществляется только", 50, 180);
+    context.fillText("c помощью клавиатуры", 50, 220);
     context.font = "16px sans-serif";
-    context.fillText("1. Старт / Пауза - Space", 50, 300);
-    context.fillText("2. Движение вправо / влево - стрелки ArrowLeft / ArrowRight", 50, 340);
+    context.fillText("1. Старт / Пауза - Space", 50, 260);
+    context.fillText("2. Движение вправо / влево - стрелки ArrowLeft / ArrowRight", 50, 300);
     context.font = "22px sans-serif";
-    context.fillText("Настройки игры", 50, 380);
+    context.fillText("Настройки игры", 50, 340);
     context.font = "16px sans-serif";
-    context.fillText("3. Изменение скорости движения мяча - стрелки ArrowUp / ArrowDown", 50, 420);
+    context.fillText("3. Изменение скорости движения мяча - стрелки ArrowUp / ArrowDown", 50, 380);
+    context.fillText("4. Изменение размера платформы - кнопки + / -", 50, 420);
 
     // Функция для начала игры
     function startGame() {
@@ -257,6 +261,19 @@ function movePlayer(e){
             player.x = nextPlayerX;
         }
     }
+    if (e.key === '+') {
+        playerWidth += playerSizeStep;
+        if (playerWidth > maxPlayerSize) {
+            playerWidth = maxPlayerSize;
+        }
+        player.width = playerWidth;
+    } else if (e.key === '-') {
+        playerWidth -= playerSizeStep;
+        if (playerWidth < minPlayerSize) {
+            playerWidth = minPlayerSize;
+        }
+        player.width = playerWidth;
+    }
 }
 
 function detectCollision(a, b){
@@ -281,6 +298,7 @@ function rightCollision(ball, block) { //a справа b (мяч справа �
 }
 function resetGame() {
     gameOver = false;
+    playerWidth = 70; // Вернуть размер игрока к первоначальному значению 70
     player = {
         x : boardWidth/2 - playerWidth/2,
         y : boardHeight - playerHeight - 5,
